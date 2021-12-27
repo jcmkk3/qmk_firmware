@@ -1,0 +1,37 @@
+name: Build personal keymaps
+
+on:
+  push:
+    branches:
+      - jcmkk3/*
+
+  workflow_dispatch:
+
+jobs:
+  Build:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        keyboard:
+          - broom/thephantom
+        keymap:
+          - jcmkk3
+
+    container: qmkfm/qmk_cli
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 1
+        persist-credentials: false
+        submodules: recursive
+
+    - name: Build firmware
+      run: qmk compile -kb "${{ matrix.keyboard }}" -km "${{ matrix.keymap }}"
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: jcmkk3_firmware
+        path: '*.hex'
+        retention-days: 30
