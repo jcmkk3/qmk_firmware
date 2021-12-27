@@ -2,14 +2,24 @@
 
 #include "oneshot.h"
 
-/* Layers */
-#define DEF_L 0
-#define NAV_L 1
-#define UPP_L 2
-#define SYM_L 3
-#define NUM_L 4
+#define MO_NAV MO(NAV)
+#define MO_UPP MO(UPP)
+#define MO_SYM MO(SYM)
+#define MO_NUM MO(NUM)
+#define CUT C(KC_X)
+#define COPY C(KC_C)
+#define PASTE C(KC_V)
+#define UNDO C(KC_Z)
+#define SEL_ALL C(KC_A)
 
-/* Callum Mods */
+enum layers {
+    DEF,
+    NAV,
+    UPP,
+    SYM,
+    NUM,
+};
+
 enum keycodes {
     // Custom oneshot mod implementation with no timers.
     OS_SHFT = SAFE_RANGE,
@@ -18,14 +28,6 @@ enum keycodes {
     OS_GUI,
 };
 
-/* Shortcuts */
-#define CUT C(KC_X)
-#define COPY C(KC_C)
-#define PASTE C(KC_V)
-#define UNDO C(KC_Z)
-#define SEL_ALL C(KC_A)
-
-/* Combos */
 const uint16_t PROGMEM fm_combo[] = {KC_F, KC_M, COMBO_END};
 const uint16_t PROGMEM fp_combo[] = {KC_F, KC_P, COMBO_END};
 const uint16_t PROGMEM cl_combo[] = {KC_C, KC_L, COMBO_END};
@@ -60,68 +62,64 @@ combo_t key_combos[COMBO_COUNT] = {
   COMBO(cut_copy_combo, SEL_ALL),
 };
 
-layer_state_t layer_state_set_user(layer_state_t state) {
-    return update_tri_layer_state(state, UPP_L, SYM_L, NUM_L);
-}
-
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
-    [DEF_L] = LAYOUT( \
+    [DEF] = LAYOUT( \
     // ╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮   ╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮
-         KC_W,         KC_F,         KC_M,         KC_P,         KC_G,              KC_K,          KC_U,         KC_O,         KC_Y,         KC_QUOT,     \
-         KC_R,         KC_S,         KC_N,         KC_T,         KC_B,              KC_J,          KC_A,         KC_E,         KC_I,         KC_H,        \
-                       KC_C,         KC_L,         KC_D,                                           KC_X,         KC_COMMA,     KC_DOT,                    \
+         KC_W,         KC_F,         KC_M,         KC_P,         KC_G,              KC_K,        KC_U,         KC_O,         KC_Y,         KC_QUOT,     \
+         KC_R,         KC_S,         KC_N,         KC_T,         KC_B,              KC_J,        KC_A,         KC_E,         KC_I,         KC_H,        \
+                       KC_C,         KC_L,         KC_D,                                         KC_X,         KC_COMMA,     KC_DOT,                    \
     // ╰─────────────┴─────────────┴─────────────╮                                                           ╭─────────────┴─────────────┴─────────────╯
-                                                   MO(NAV_L),    KC_SPACE,          MO(UPP_L),     MO(SYM_L)    \
+                                                   MO_NAV,       KC_SPACE,         MO_UPP,       MO_SYM       \
     //                                           ╰─────────────┴─────────────╯   ╰─────────────┴─────────────╯
     ),
 
-    [NAV_L] = LAYOUT( \
+    [NAV] = LAYOUT( \
     // ╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮   ╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮
-         KC_F1,        KC_F2,        KC_F3,        KC_F4,        KC_F5,             KC_PGUP,       KC_HOME,      KC_UP,        KC_END,       XXXXXXX,     \
-         OS_GUI,       OS_ALT,       OS_SHFT,      OS_CTRL,      UNDO,              KC_PGDN,       KC_LEFT,      KC_ENTER,     KC_RIGHT,     KC_ESC,      \
-                       CUT,          COPY,         PASTE,                                          KC_TAB,       KC_DOWN,      XXXXXXX,                   \
+         KC_F1,        KC_F2,        KC_F3,        KC_F4,        KC_F5,            KC_PGUP,      KC_HOME,      KC_UP,        KC_END,       XXXXXXX,     \
+         OS_GUI,       OS_ALT,       OS_SHFT,      OS_CTRL,      UNDO,             KC_PGDN,      KC_LEFT,      KC_ENTER,     KC_RIGHT,     KC_ESC,      \
+                       CUT,          COPY,         PASTE,                                        KC_TAB,       KC_DOWN,      XXXXXXX,                   \
     // ╰─────────────┴─────────────┴─────────────╮                                                           ╭─────────────┴─────────────┴─────────────╯
-                                                   _______,      _______,           KC_BSPC,       KC_DEL       \
+                                                   _______,      _______,          KC_BSPC,      KC_DEL       \
     //                                           ╰─────────────┴─────────────╯   ╰─────────────┴─────────────╯
     ),
 
-    [UPP_L] = LAYOUT( \
+    [UPP] = LAYOUT( \
     // ╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮   ╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮
-         S(KC_W),      S(KC_F),      S(KC_M),      S(KC_P),      S(KC_G),           S(KC_K),       S(KC_U),      S(KC_O),      S(KC_Y),      S(KC_QUOT),  \
-         S(KC_R),      S(KC_S),      S(KC_N),      S(KC_T),      S(KC_B),           S(KC_J),       S(KC_A),      S(KC_E),      S(KC_I),      S(KC_H),     \
-                       S(KC_C),      S(KC_L),      S(KC_D),                                        S(KC_X),      S(KC_COMMA),  S(KC_DOT),                 \
+         S(KC_W),      S(KC_F),      S(KC_M),      S(KC_P),      S(KC_G),          S(KC_K),      S(KC_U),      S(KC_O),      S(KC_Y),      S(KC_QUOT),  \
+         S(KC_R),      S(KC_S),      S(KC_N),      S(KC_T),      S(KC_B),          S(KC_J),      S(KC_A),      S(KC_E),      S(KC_I),      S(KC_H),     \
+                       S(KC_C),      S(KC_L),      S(KC_D),                                      S(KC_X),      S(KC_COMMA),  S(KC_DOT),                 \
     // ╰─────────────┴─────────────┴─────────────╮                                                           ╭─────────────┴─────────────┴─────────────╯
-                                                   _______,      S(KC_SPACE),       _______,       _______      \
+                                                   _______,      S(KC_SPACE),      _______,      _______      \
     //                                           ╰─────────────┴─────────────╯   ╰─────────────┴─────────────╯
     ),
 
-    [SYM_L] = LAYOUT( \
+    [SYM] = LAYOUT( \
     // ╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮   ╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮
-         KC_EXLM,      KC_AT,        KC_HASH,      KC_DLR,       KC_PERC,           KC_CIRC,       KC_AMPR,      KC_SCLN,      KC_COLON,     KC_DQT,      \
-         KC_MINUS,     KC_PLUS,      KC_EQUAL,     KC_ASTR,      KC_SLSH,           KC_BSLS,       OS_CTRL,      OS_SHFT,      OS_ALT,       OS_GUI,      \
-                       KC_TILDE,     KC_GRAVE,     KC_QUES,                                        KC_PIPE,      KC_LT,        KC_GT,                     \
+         KC_EXLM,      KC_AT,        KC_HASH,      KC_DLR,       KC_PERC,          KC_CIRC,      KC_AMPR,      KC_SCLN,      KC_COLON,     KC_DQT,      \
+         KC_MINUS,     KC_PLUS,      KC_EQUAL,     KC_ASTR,      KC_SLSH,          KC_BSLS,      OS_CTRL,      OS_SHFT,      OS_ALT,       OS_GUI,      \
+                       KC_TILDE,     KC_GRAVE,     KC_QUES,                                      KC_PIPE,      KC_LT,        KC_GT,                     \
     // ╰─────────────┴─────────────┴─────────────╮                                                           ╭─────────────┴─────────────┴─────────────╯
-                                                   _______,      KC_UNDS,           _______,       _______      \
+                                                   _______,      KC_UNDS,          _______,      _______      \
     //                                           ╰─────────────┴─────────────╯   ╰─────────────┴─────────────╯
     ),
 
-    [NUM_L] = LAYOUT( \
+    [NUM] = LAYOUT( \
     // ╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮   ╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮
-         XXXXXXX,      KC_7,         KC_8,         KC_9,         XXXXXXX,           KC_F6,         KC_F7,        KC_F8,        KC_F9,        KC_F10,      \
-         KC_MINUS,     KC_4,         KC_5,         KC_6,         KC_SLSH,           KC_F11,        OS_CTRL,      OS_SHFT,      OS_ALT,       OS_GUI,      \
-                       KC_1,         KC_2,         KC_3,                                           KC_F12,       KC_COMMA,     KC_DOT,                    \
+         XXXXXXX,      KC_7,         KC_8,         KC_9,         XXXXXXX,          KC_F6,        KC_F7,        KC_F8,        KC_F9,        KC_F10,      \
+         KC_MINUS,     KC_4,         KC_5,         KC_6,         KC_SLSH,          KC_F11,       OS_CTRL,      OS_SHFT,      OS_ALT,       OS_GUI,      \
+                       KC_1,         KC_2,         KC_3,                                         KC_F12,       KC_COMMA,     KC_DOT,                    \
     // ╰─────────────┴─────────────┴─────────────╮                                                           ╭─────────────┴─────────────┴─────────────╯
-                                                   _______,      KC_0,              _______,       _______      \
+                                                   _______,      KC_0,             _______,      _______      \
     //                                           ╰─────────────┴─────────────╯   ╰─────────────┴─────────────╯
     ),
 };
 
 bool is_oneshot_cancel_key(uint16_t keycode) {
     switch (keycode) {
-    case MO(NAV_L):
-    case MO(UPP_L):
-    case MO(SYM_L):
-    case MO(NUM_L):
+    case MO_NAV:
+    case MO_UPP:
+    case MO_SYM:
+    case MO_NUM:
         return true;
     default:
         return false;
@@ -130,10 +128,10 @@ bool is_oneshot_cancel_key(uint16_t keycode) {
 
 bool is_oneshot_ignored_key(uint16_t keycode) {
     switch (keycode) {
-    case MO(NAV_L):
-    case MO(UPP_L):
-    case MO(SYM_L):
-    case MO(NUM_L):
+    case MO_NAV:
+    case MO_UPP:
+    case MO_SYM:
+    case MO_NUM:
     case OS_SHFT:
     case OS_CTRL:
     case OS_ALT:
@@ -166,6 +164,10 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         &os_gui_state, KC_LGUI, OS_GUI,
         keycode, record
     );
-
     return true;
+}
+
+
+layer_state_t layer_state_set_user(layer_state_t state) {
+    return update_tri_layer_state(state, UPP, SYM, NUM);
 }
