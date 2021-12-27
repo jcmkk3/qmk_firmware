@@ -26,26 +26,6 @@ enum keycodes {
 #define SEL_ALL C(KC_A)
 
 /* Combos */
-enum combos {
-    FM_LOWER_V,
-    FP_LOWER_Q,
-    CL_LOWER_Z,
-    FM_UPPER_V,
-    FP_UPPER_Q,
-    CL_UPPER_Z,    
-    FS_LBRC,
-    YI_RBRC,
-    MN_LPRN,
-    OE_RPRN,
-    PT_LCBR,
-    UA_RCBR,
-    PG_ESC,
-    TB_DEL,
-    CUTCOPY_SEL_ALL,
-    COMBO_LENGTH,
-};
-uint16_t COMBO_LEN = COMBO_LENGTH;
-
 const uint16_t PROGMEM fm_combo[] = {KC_F, KC_M, COMBO_END};
 const uint16_t PROGMEM fp_combo[] = {KC_F, KC_P, COMBO_END};
 const uint16_t PROGMEM cl_combo[] = {KC_C, KC_L, COMBO_END};
@@ -62,22 +42,22 @@ const uint16_t PROGMEM pg_combo[] = {KC_P, KC_G, COMBO_END};
 const uint16_t PROGMEM tb_combo[] = {KC_T, KC_B, COMBO_END};
 const uint16_t PROGMEM cut_copy_combo[] = {CUT, COPY, COMBO_END};
 
-combo_t key_combos[] = {
-  [FM_LOWER_V] = COMBO(fm_combo, KC_V),
-  [FP_LOWER_Q] = COMBO(fp_combo, KC_Q),
-  [CL_LOWER_Z] = COMBO(cl_combo, KC_Z),
-  [FM_UPPER_V] = COMBO(fm_upper_combo, S(KC_V)),
-  [FP_UPPER_Q] = COMBO(fp_upper_combo, S(KC_Q)),
-  [CL_UPPER_Z] = COMBO(cl_upper_combo, S(KC_Z)),
-  [FS_LBRC] = COMBO(fs_combo, KC_LBRC),
-  [YI_RBRC] = COMBO(yi_combo, KC_RBRC),
-  [MN_LPRN] = COMBO(mn_combo, KC_LPRN),
-  [OE_RPRN] = COMBO(oe_combo, KC_RPRN),
-  [PT_LCBR] = COMBO(pt_combo, KC_LCBR),
-  [UA_RCBR] = COMBO(ua_combo, KC_RCBR),
-  [PG_ESC] = COMBO(pg_combo, KC_ESC),
-  [TB_DEL] = COMBO(tb_combo, KC_DEL),
-  [CUTCOPY_SEL_ALL] = COMBO(cut_copy_combo, SEL_ALL),
+combo_t key_combos[COMBO_COUNT] = {
+  COMBO(fm_combo, KC_V),
+  COMBO(fp_combo, KC_Q),
+  COMBO(cl_combo, KC_Z),
+  COMBO(fm_upper_combo, S(KC_V)),
+  COMBO(fp_upper_combo, S(KC_Q)),
+  COMBO(cl_upper_combo, S(KC_Z)),
+  COMBO(fs_combo, KC_LBRC),
+  COMBO(yi_combo, KC_RBRC),
+  COMBO(mn_combo, KC_LPRN),
+  COMBO(oe_combo, KC_RPRN),
+  COMBO(pt_combo, KC_LCBR),
+  COMBO(ua_combo, KC_RCBR),
+  COMBO(pg_combo, KC_ESC),
+  COMBO(tb_combo, KC_DEL),
+  COMBO(cut_copy_combo, SEL_ALL),
 };
 
 layer_state_t layer_state_set_user(layer_state_t state) {
