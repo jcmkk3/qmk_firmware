@@ -62,7 +62,7 @@ const uint16_t PROGMEM pg_combo[] = {KC_P, KC_G, COMBO_END};
 const uint16_t PROGMEM tb_combo[] = {KC_T, KC_B, COMBO_END};
 const uint16_t PROGMEM cut_copy_combo[] = {CUT, COPY, COMBO_END};
 
-combo_t key_combos[COMBO_COUNT] = {
+combo_t key_combos[] = {
   [FM_LOWER_V] = COMBO(fm_combo, KC_V),
   [FP_LOWER_Q] = COMBO(fp_combo, KC_Q),
   [CL_LOWER_Z] = COMBO(cl_combo, KC_Z),
@@ -183,7 +183,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         keycode, record
     );
     update_oneshot(
-        &os_cmd_state, KC_LGUI, OS_GUI,
+        &os_gui_state, KC_LGUI, OS_GUI,
         keycode, record
     );
 
